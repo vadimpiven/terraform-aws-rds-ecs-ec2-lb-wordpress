@@ -1,0 +1,44 @@
+[
+    {
+        "name": "wordpress",
+        "image": "wordpress",
+        "cpu": 512,
+        "memory": 300,
+        "essential": true,
+        "portMappings": [
+            {
+                "hostPort": 80,
+                "containerPort": 80,
+                "protocol": "tcp"
+            }
+        ],
+        "environment": [
+            {
+                "name": "WORDPRESS_DB_HOST",
+                "value": "${db_host}"
+            },
+            {
+                "name": "WORDPRESS_DB_USER",
+                "value": "${db_user}"
+            },
+            {
+                "name": "WORDPRESS_DB_PASSWORD",
+                "value": "${db_password}"
+            },
+            {
+                "name": "WORDPRESS_DB_NAME",
+                "value": "${db_name}"
+            }
+        ]
+    },
+    {
+        "name": "zap",
+        "image": "owasp/zap2docker-live",
+        "cpu": 512,
+        "memory": 400,
+        "essential": true,
+        "links": ["wordpress"],
+        "entrypoint": ["zap-x.sh"],
+        "command": ["-daemon -quickurl http://wordpress"]
+    }
+]
